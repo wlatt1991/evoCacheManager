@@ -44,7 +44,7 @@ if($e->name == 'OnManagerWelcomeHome') {
 						<button id="ecm_play_refresh" type="button" class="btn btn-sm btn-success" onclick="refreshCache();">
 							<i class="fa fa-refresh" aria-hidden="true"></i> <span>'.$ecm_lang['refresh'].'</span>
 						</button>
-						<button type="button" class="btn btn-sm btn-danger" onclick="parent.modx.popup({url:\'index.php?a=26\', title:\''.$ecm_lang['clear'].'\', icon: \'fa-recycle\', iframe: \'ajax\', selector: \'.tab-page>.container\', position: \'right top\', width: \'auto\', maxheight: \'50%\', wrap: \'body\' });">
+						<button type="button" class="btn btn-sm btn-danger" onclick="clearCache();">
 							<i class="fa fa-trash" aria-hidden="true"></i> '.$ecm_lang['clear'].'
 						</button>
 					</div>
@@ -62,7 +62,7 @@ if($e->name == 'OnManagerWelcomeHome') {
 					function doCache() {
 						doCacheVal = !doCacheVal;
 						if (doCacheVal) {
-							$("#ecm_play_stop > span").text("Остановить");
+							$("#ecm_play_stop > span").text("'.$ecm_lang['stop'].'");
 							$("#ecm_play_stop > i").removeClass("fa-play");
 							$("#ecm_play_stop > i").addClass("fa-stop");
 							$("#ecm_progress_bar").addClass("progress-bar-striped");
@@ -130,6 +130,21 @@ if($e->name == 'OnManagerWelcomeHome') {
 								fun: "init",
 						    },
 							success: parseRes,
+						});
+					}
+					
+					function clearCache() {
+						$("#ecm_progress_bar").css({"width": "0%"});
+						$.ajax({
+							url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
+							type: "POST",
+							data: { 
+								fun: "clear",
+						    },
+							success: function(json) {
+								parseRes(json);
+								initCache();
+							},
 						});
 					}
 					
