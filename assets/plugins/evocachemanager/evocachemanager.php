@@ -78,6 +78,10 @@ if($e->name == 'OnManagerWelcomeHome') {
                         font-size: .6772rem;
                         border-radius: .1rem;
                     }
+                    .progress-bar-striped {
+                        background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+                        background-size: 1rem 1rem;
+                    }
                 </style>
                 <div class="sectionBody">
                 	<div style="margin-bottom: 0.5rem; width: 100%;">
