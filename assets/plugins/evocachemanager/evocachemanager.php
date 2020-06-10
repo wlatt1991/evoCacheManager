@@ -92,7 +92,6 @@ if($e->name == 'OnManagerWelcomeHome') {
 								bar_color = "#5cb85c";
 							}
 							$("#ecm_progress_bar").css({"width": res.perc+"%", "background-color": bar_color});
-							getCache();
 						}
 					}
 					
@@ -105,7 +104,12 @@ if($e->name == 'OnManagerWelcomeHome') {
 									fun: "get",
 									part: "'.$part.'",
 								},
-								success: parseRes,
+								success: function(json) {
+								    parseRes(json);
+								    if (json.count_cached_docs === json.count_all_docs) {
+								        getCache();
+								    }
+								}
 							});
 						}
 					}
