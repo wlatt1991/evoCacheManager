@@ -68,8 +68,6 @@ if($e->name == 'OnManagerWelcomeHome') {
                         -ms-user-select: none;
                         user-select: none;
                         cursor: pointer;
-                        background-color: #fff;
-                        border: 1px solid #d4d4d4;
                         border-radius: .1em;
                         -webkit-transition: color 0.2s ease-in-out,background-color 0.2s ease-in-out,border-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out;
                         -o-transition: color 0.2s ease-in-out,background-color 0.2s ease-in-out,border-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out;
