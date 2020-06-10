@@ -1,7 +1,4 @@
 <?php
-error_reporting(0);
-ini_set('display_errors','Off');
-
 if (!isset($_POST["fun"])){
     die('What are you doing? Get out of here!');
 }
@@ -26,6 +23,8 @@ if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQ
 }
 
 set_time_limit(600);
+error_reporting(0);
+ini_set('display_errors','Off');
 
 if ($fun === 'get' || $fun === 'init') {
     $res = $modx->db->select('id', $modx->getFullTableName("site_content"), "cacheable = '1' AND type = 'document' AND published = '1' AND deleted = '0' AND privateweb = '0' AND privatemgr = '0'");
