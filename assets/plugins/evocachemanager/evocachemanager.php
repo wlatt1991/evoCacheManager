@@ -15,28 +15,7 @@ $e = &$modx->Event;
 if($e->name == 'OnManagerWelcomeHome') {
     $position = isset($position) ? $position : 20;
     $width = isset($width) ? $width : 12;
-
-    $res = $modx->db->select('id', $modx->getFullTableName("site_content"), "cacheable = '1' AND type = 'document' AND published = '1' AND deleted = '0' AND privateweb = '0' AND privatemgr = '0'");
-    $count_all_docs = $modx->db->getRecordCount($res);
-    $count_cached_docs = 0;
-
-    while ($line = $modx->db->getRow($res)) {
-        if (count(glob(MODX_BASE_PATH."assets/cache/docid_" . $line['id'] . "*.pageCache.php")) > 0) {
-            $count_cached_docs++;
-        }
-    }
-
-    $perc = floor($count_cached_docs / $count_all_docs * 100);
-
-    if ($perc <= 20) {
-        $bar_color = '#d9534f';
-    } elseif ($perc > 20 && $perc < 50) {
-        $bar_color = '#f0ad4e';
-    } elseif ($perc >= 50 && $perc < 90) {
-        $bar_color = '#5bc0de';
-    } else {
-        $bar_color = '#5cb85c';
-    }
+    $part = isset($part) ? $part : 2;
 
     $widgets['managernote_widget'] = [
         'menuindex' => $position,
@@ -51,18 +30,21 @@ if($e->name == 'OnManagerWelcomeHome') {
                 </style>
                 <div class="sectionBody">
                 	<div style="margin-bottom: 0.5rem; width: 100%;">
-						'.$ecm_lang['caching'].': <span id="ecm_perc">'.$perc.'</span>% (<span id="ecm_count_cached_docs">'.$count_cached_docs.'</span>/<span id="ecm_count_all_docs">'.$count_all_docs.'</span>). '.$ecm_lang['refresh_cache'].'
+						'.$ecm_lang['caching'].': <span id="ecm_perc">-</span>% (<span id="ecm_count_cached_docs">-</span>/<span id="ecm_count_all_docs">-</span>). '.$ecm_lang['refresh_cache'].'
 					</div>
 					<div style="margin-bottom: 1rem; width: 100%;">
 						<div id="ecm_progress" class="progress" style="height: 1.45rem">
-							<div id="ecm_progress_bar" class="progress-bar" role="progressbar" style="background-color: '.($bar_color).'; width: '.$perc.'%;" aria-valuenow="'.$perc.'" aria-valuemin="0" aria-valuemax="100"></div>
+							<div id="ecm_progress_bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
 					</div>
 					<div style="width: 100%;">
 						<button id="ecm_play_stop" type="button" class="btn btn-sm btn-success" onclick="doCache();">
 							<i class="fa fa-play" aria-hidden="true"></i> <span>'.$ecm_lang['create'].'</span>
 						</button>
-						<button type="button" class="btn btn-sm btn-danger" onclick="modx.popup({url:\'index.php?a=26\', title:\''.$ecm_lang['clear'].'\', icon: \'fa-recycle\', iframe: \'ajax\', selector: \'.tab-page>.container\', position: \'right top\', width: \'auto\', maxheight: \'50%\', wrap: \'body\' })">
+						<button id="ecm_play_refresh" type="button" class="btn btn-sm btn-success" onclick="refreshCache();">
+							<i class="fa fa-refresh" aria-hidden="true"></i> <span>'.$ecm_lang['refresh'].'</span>
+						</button>
+						<button type="button" class="btn btn-sm btn-danger" onclick="parent.modx.popup({url:\'index.php?a=26\', title:\''.$ecm_lang['clear'].'\', icon: \'fa-recycle\', iframe: \'ajax\', selector: \'.tab-page>.container\', position: \'right top\', width: \'auto\', maxheight: \'50%\', wrap: \'body\' });">
 							<i class="fa fa-trash" aria-hidden="true"></i> '.$ecm_lang['clear'].'
 						</button>
 					</div>
@@ -95,32 +77,63 @@ if($e->name == 'OnManagerWelcomeHome') {
 						}
 					}
 					
+					function parseRes(res) {
+						if (res) {
+							$("#ecm_perc").text(res.perc);
+							$("#ecm_count_cached_docs").text(res.count_cached_docs);
+							$("#ecm_count_all_docs").text(res.count_all_docs);
+							if (res.perc <= 20) {
+								bar_color = "#d9534f";
+							} else if (res.perc > 20 && res.perc < 50) {
+								bar_color = "#f0ad4e";
+							} else if (res.perc >= 50 && res.perc < 90) {
+								bar_color = "#5bc0de";
+							} else {
+								bar_color = "#5cb85c";
+							}
+							$("#ecm_progress_bar").css({"width": res.perc+"%", "background-color": bar_color});
+							getCache();
+						}
+					}
+					
 					function getCache() {
 						if (doCacheVal) {
 							$.ajax({
-							url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
-							type: "POST",
-							success: function(res) {
-								if (res) {
-									$("#ecm_perc").text(res.perc);
-									$("#ecm_count_cached_docs").text(res.count_cached_docs);
-									$("#ecm_count_all_docs").text(res.count_all_docs);
-									if (res.perc <= 20) {
-										bar_color = "#d9534f";
-									} else if (res.perc > 20 && res.perc < 50) {
-										bar_color = "#f0ad4e";
-									} else if (res.perc >= 50 && res.perc < 90) {
-										bar_color = "#5bc0de";
-									} else {
-										bar_color = "#5cb85c";
-									}
-									$("#ecm_progress_bar").css({"width": res.perc+"%", "background-color": bar_color});
-									getCache();
-								}
-							}
-						});
+								url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
+								type: "POST",
+								data: { 
+									fun: "get"
+									part: "'.$part.'",
+								},
+								success: parseRes
+							});
 						}
 					}
+					
+					function initCache() {
+						$.ajax({
+							url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
+							type: "POST",
+							data: { 
+								fun: "init"
+						    },
+							success: parseRes
+						});
+					}
+					
+					function refreshCache() {
+						$("#ecm_progress_bar").css({"width": "0%"});
+						$.ajax({
+							url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
+							type: "POST",
+							data: { 
+								fun: "init"
+						    },
+							success: parseRes
+						});
+					}
+					
+					initCache();
                 </script>
             </div>'
     ];
