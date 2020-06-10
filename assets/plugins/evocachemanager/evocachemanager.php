@@ -1,11 +1,14 @@
 <?php
 if(!defined('MODX_BASE_PATH')){die('What are you doing? Get out of here!');}
 
-global $modx, $_lang;
+global $modx;
+
 $plugin_path = $modx->config['base_path'] . "assets/plugins/evocachemanager/";
-include($plugin_path.'lang/english.php');
-if (file_exists($plugin_path.'lang/' . $modx->config['manager_language'] . '.php')) {
-    include($plugin_path.'lang/' . $modx->config['manager_language'] . '.php');
+
+include($plugin_path.'lang/english.inc.php');
+
+if (file_exists($plugin_path.'lang/' . $modx->config['manager_language'] . '.inc.php')) {
+    include($plugin_path.'lang/' . $modx->config['manager_language'] . '.inc.php');
 }
 
 $e = &$modx->Event;
@@ -18,7 +21,7 @@ if($e->name == 'OnManagerWelcomeHome') {
         'id' => 'evocachemanager_widget',
         'cols' => 'col-sm-'.$width,
         'icon' => 'fa-recycle',
-        'title' => $_lang['title'],
+        'title' => $ecm_lang['title'],
         'body' => '
             <div class="card-body">
                 <script type="text/javascript" src="'.MODX_SITE_URL.'assets/modules/evocacheallpages/progressbar.js"></script>
@@ -27,8 +30,8 @@ if($e->name == 'OnManagerWelcomeHome') {
 		</style>
 		<div class="sectionBody">
         <ul class="actionButtons" style="margin: 10px 20px">
-            <li id="Button2"><a href="#" onclick="$(\'progressbar_0_dark\').setStyle(\'background\', \'#006\');ajaxCache(0);"><img src="media/style/'.$manager_theme.'/images/icons/trash.png" /> '.$cap_lang['create'].'</a></li>
-            <li id="Button1"><a href="#" onclick="document.location.href=\'index.php?a=106\';"><img src="media/style/'.$manager_theme.'/images/icons/stop.png" /> '.$cap_lang['close'].'</a></li>
+            <li id="Button2"><a href="#" onclick="$(\'progressbar_0_dark\').setStyle(\'background\', \'#006\');ajaxCache(0);"><img src="media/style/'.$manager_theme.'/images/icons/trash.png" /> '.$ecm_lang['create'].'</a></li>
+            <li id="Button1"><a href="#" onclick="document.location.href=\'index.php?a=106\';"><img src="media/style/'.$manager_theme.'/images/icons/stop.png" /> '.$ecm_lang['close'].'</a></li>
  		</ul>		
 		<div id="wrapper" style="margin: 10px 20px"></div>
 		</div>
