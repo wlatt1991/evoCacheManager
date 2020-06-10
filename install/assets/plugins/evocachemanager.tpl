@@ -11,7 +11,7 @@
  * @author      Wlatt (wlatt1991@yandex.ru)
  * @internal    @events OnManagerWelcomeHome
  * @internal    @modx_category Manager and Admin
- * @internal    @properties  &position=Position on dashboard;text;20 &width=Widget width (12 or 6);text;12
+ * @internal    @properties  &position=Position on dashboard;text;20 &width=Widget width (12 or 6);text;12 &part=Number of requests at a time;text;2
  * @internal    @installset base
  * @internal    @disabled 0
  */

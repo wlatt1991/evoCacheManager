@@ -32,12 +32,10 @@ $do = 0;
 while ($line = $modx->db->getRow($res)) {
     if (count(glob(MODX_BASE_PATH."assets/cache/docid_" . $line['id'] . "*.pageCache.php")) > 0) {
         $count_cached_docs++;
-    } elseif ($do < $part) {
+    } elseif (($do < $part) && ($fun === 'get')) {
         $count_cached_docs++;
-        if ($fun === 'get') {
-            file_get_contents($modx->makeUrl($line['id'], '', '', 'full'));
-            $do++;
-        }
+        file_get_contents($modx->makeUrl($line['id'], '', '', 'full'));
+        $do++;
     }
 }
 
@@ -46,7 +44,7 @@ $perc = floor($count_cached_docs / $count_all_docs * 100);
 header('Content-type: application/json');
 
 echo json_encode(array(
-    'count_cached_docs' => $count_cached_docs + $do,
+    'count_cached_docs' => $count_cached_docs,
     'count_all_docs' => $count_all_docs,
     'perc' => $perc,
     'do' => !!($count_cached_docs < $count_all_docs),

@@ -102,10 +102,10 @@ if($e->name == 'OnManagerWelcomeHome') {
 								url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
 								type: "POST",
 								data: { 
-									fun: "get"
+									fun: "get",
 									part: "'.$part.'",
 								},
-								success: parseRes
+								success: parseRes,
 							});
 						}
 					}
@@ -115,9 +115,9 @@ if($e->name == 'OnManagerWelcomeHome') {
 							url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
 							type: "POST",
 							data: { 
-								fun: "init"
+								fun: "init",
 						    },
-							success: parseRes
+							success: parseRes,
 						});
 					}
 					
@@ -127,9 +127,9 @@ if($e->name == 'OnManagerWelcomeHome') {
 							url: "/assets/plugins/evocachemanager/ajaxevocachemanager.php",
 							type: "POST",
 							data: { 
-								fun: "init"
+								fun: "init",
 						    },
-							success: parseRes
+							success: parseRes,
 						});
 					}
 					
