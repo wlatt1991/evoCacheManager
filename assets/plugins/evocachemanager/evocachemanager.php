@@ -108,6 +108,8 @@ if($e->name == 'OnManagerWelcomeHome') {
 								    parseRes(json);
 								    if (json.count_cached_docs < json.count_all_docs) {
 								        getCache();
+								    } else {
+								        doCache();
 								    }
 								}
 							});
