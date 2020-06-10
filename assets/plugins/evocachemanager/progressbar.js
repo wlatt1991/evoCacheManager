@@ -1,4 +1,4 @@
-var ProgressBar=new Class({
+var ProgressBar = new Class({
 	initialize:function(value,parameters){
 		var vals={
 			'id':'progressbar_'+(ProgressBars++),

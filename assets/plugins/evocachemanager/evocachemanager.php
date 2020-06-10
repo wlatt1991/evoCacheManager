@@ -36,8 +36,8 @@ if($e->name == 'OnManagerWelcomeHome') {
                             </a>
                         </li>
                         <li id="Button1">
-                            <a href="#" onclick="document.location.href=\'index.php?a=106\';">
-                                <i class="fa fa-plus" aria-hidden="true"></i> '.$ecm_lang['close'].'
+                            <a href="#" onclick="document.location.href=\'index.php?a=26\';">
+                                <i class="fa fa-recycle" aria-hidden="true"></i> '.$ecm_lang['clear'].'
                             </a>
                         </li>
                     </ul>		
@@ -52,7 +52,7 @@ if($e->name == 'OnManagerWelcomeHome') {
                 $(\'wrapper\').appendChild(pb);
                 
                 function ajaxCache(progress) {
-                    new Ajax(\''.MODX_SITE_URL.'assets/modules/plugins/ajaxevocachemanager.php\', {
+                    new Ajax(\''.MODX_SITE_URL.'assets/plugins/evocachemanager/ajaxevocachemanager.php\', {
                         method: \'post\',
                         postBody: Object.toQueryString({progress: progress}),
                         onComplete: nextCache
