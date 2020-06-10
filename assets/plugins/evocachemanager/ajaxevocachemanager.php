@@ -27,7 +27,7 @@ error_reporting(0);
 ini_set('display_errors','Off');
 
 if ($fun === 'get' || $fun === 'init') {
-    $res = $modx->db->select('id', $modx->getFullTableName("site_content"), "cacheable = '1' AND type = 'document' AND published = '1' AND deleted = '0' AND privateweb = '0' AND privatemgr = '0'");
+    $res = $modx->db->select('id', $modx->getFullTableName("site_content"), "cacheable = '1' AND type = 'document' AND published = '1' AND template <> '0' AND deleted = '0' AND privateweb = '0' AND privatemgr = '0'");
     $count_all_docs = $modx->db->getRecordCount($res);
     $count_cached_docs = 0;
 
