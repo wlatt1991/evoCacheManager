@@ -26,7 +26,60 @@ if($e->name == 'OnManagerWelcomeHome') {
         'body' =>
             '<div class="card-body">
                 <style type="text/css">
-                    .progressbar_wrapper div{font:20px Arial;}
+                    .progress {
+                        display: -ms-flexbox;
+                        display: flex;
+                        height: 1rem;
+                        overflow: hidden;
+                        font-size: .75rem;
+                        background-color: #e9ecef;
+                        border-radius: .25rem;
+                    }
+                    .progress-bar {
+                        display: -ms-flexbox;
+                        display: flex;
+                        -ms-flex-direction: column;
+                        flex-direction: column;
+                        -ms-flex-pack: center;
+                        justify-content: center;
+                        color: #fff;
+                        text-align: center;
+                        white-space: nowrap;
+                        background-color: #007bff;
+                        transition: width .6s ease;
+                    }
+                    .progress-bar.active {
+						-webkit-animation: progress-bar-stripes 1s linear infinite;
+						-o-animation: progress-bar-stripes 1s linear infinite;
+						animation: progress-bar-stripes 1s linear infinite;
+					}
+					.btn {
+					    display: inline-block;
+                        padding: 0.46153846em 1em;
+                        line-height: 1.23076923;
+                        vertical-align: inherit;
+                        text-align: center;
+                        text-decoration: none !important;
+                        font-size: 0.8125rem;
+                        font-weight: 400;
+                        white-space: nowrap;
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        -ms-user-select: none;
+                        user-select: none;
+                        cursor: pointer;
+                        background-color: #fff;
+                        border: 1px solid #d4d4d4;
+                        border-radius: .1em;
+                        -webkit-transition: color 0.2s ease-in-out,background-color 0.2s ease-in-out,border-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out;
+                        -o-transition: color 0.2s ease-in-out,background-color 0.2s ease-in-out,border-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out;
+                        transition: color 0.2s ease-in-out,background-color 0.2s ease-in-out,border-color 0.2s ease-in-out,box-shadow 0.2s ease-in-out;
+                    }
+                    .btn-sm {
+                        padding: 0.46153846em .5rem;
+                        font-size: .6772rem;
+                        border-radius: .1rem;
+                    }
                 </style>
                 <div class="sectionBody">
                 	<div style="margin-bottom: 0.5rem; width: 100%;">
@@ -49,13 +102,6 @@ if($e->name == 'OnManagerWelcomeHome') {
 						</button>
 					</div>
 				</div>
-				<style>
-					.progress-bar.active {
-						-webkit-animation: progress-bar-stripes 1s linear infinite;
-						-o-animation: progress-bar-stripes 1s linear infinite;
-						animation: progress-bar-stripes 1s linear infinite;
-					}
-				</style>
                 <script type="text/javascript">
 					var doCacheVal = false;
 					
