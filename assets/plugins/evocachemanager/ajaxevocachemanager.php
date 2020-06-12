@@ -16,8 +16,6 @@ if (empty ($modx->config)) {
     $modx->getSettings();
 }
 
-$modx->invokeEvent("OnWebPageInit");
-
 if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest')){
     $modx->sendRedirect($modx->config['site_url']);
 }
@@ -27,32 +25,35 @@ error_reporting(0);
 ini_set('display_errors','Off');
 
 if ($fun === 'get' || $fun === 'init') {
+    $cache_folder = MODX_BASE_PATH.$modx->getCacheFolder();
     $res = $modx->db->select('id', $modx->getFullTableName("site_content"), "cacheable = '1' AND type = 'document' AND published = '1' AND template <> '0' AND deleted = '0' AND privateweb = '0' AND privatemgr = '0'");
 
-    $allDocs = array();
+    $all_docs = array();
     while ($line = $modx->db->getRow($res)) {
-        $allDocs[] = $line['id'];
+        $all_docs[] = $line['id'];
     }
 
-    $count_all_docs = count($allDocs);
+    $count_all_docs = count($all_docs);
 
-    $files = glob(MODX_BASE_PATH."assets/cache/docid_*");
+    $files = glob($cache_folder.'docid_*');
 
-    foreach($files as $key => $value) {
-        $files[$key] = explode(MODX_BASE_PATH.'assets/cache/docid_', $value)[1];
-        $files[$key] = explode('.', $files[$key])[0];
-        $files[$key] = explode('_', $files[$key])[0];
+    function file_map($str) {
+        $str = explode($cache_folder.'docid_', $str)[1];
+        $str = explode('.', $str)[0];
+        return explode('_', $str)[0];
     }
 
-    $noCachedDocs = array_diff($allDocs, $files);
+    $files = array_map('file_map', $files);
 
-    $count_cached_docs = $count_all_docs - count($noCachedDocs);
+    $no_cached_docs = array_diff($all_docs, $files);
+
+    $count_cached_docs = $count_all_docs - count($no_cached_docs);
 
     if ($fun === 'get') {
-        while($part > 0 && $id = array_pop($noCachedDocs)) {
+        while($part > 0 && $id = array_pop($no_cached_docs)) {
             $part--;
-            file_get_contents($modx->makeUrl($id, '', '', 'full'));
             $count_cached_docs++;
+            file_get_contents($modx->makeUrl($id, '', '', 'full'));
         }
     }
 
