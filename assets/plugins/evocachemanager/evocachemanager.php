@@ -154,10 +154,8 @@ if($e->name == 'OnManagerWelcomeHome') {
 									part: "'.$part.'",
 								},
 								success: function(json) {
-								    console.log(json);
-								    parseRes(json);
-								    countCachedDocs = json.count_cached_docs;
 								    if (json.count_cached_docs < json.count_all_docs && countCachedDocs !== json.count_cached_docs) {
+								        countCachedDocs = json.count_cached_docs;
 								        getCache();
 								    } else {
 								        doCache();
