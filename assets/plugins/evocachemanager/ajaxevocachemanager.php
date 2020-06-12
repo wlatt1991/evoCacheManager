@@ -45,6 +45,16 @@ if ($fun === 'get' || $fun === 'init') {
 
     $files = array_map('file_map', $files);
 
+    if (!empty($modx->config['error_page'])) {
+        $files[] = $modx->config['error_page'];
+    }
+    if (!empty($modx->config['unauthorized_page'])) {
+        $files[] = $modx->config['unauthorized_page'];
+    }
+    if (!empty($modx->config['site_unavailable_page'])) {
+        $files[] = $modx->config['site_unavailable_page'];
+    }
+
     $no_cached_docs = array_diff($all_docs, $files);
 
     $count_cached_docs = $count_all_docs - count($no_cached_docs);
@@ -53,7 +63,16 @@ if ($fun === 'get' || $fun === 'init') {
         while($part > 0 && $id = array_pop($no_cached_docs)) {
             $part--;
             $count_cached_docs++;
-            file_get_contents($modx->makeUrl($id, '', '', 'full'));
+            //file_get_contents($modx->makeUrl($id, '', '', 'full'));
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_NOBODY, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_URL, $modx->makeUrl($id, '', '', 'full'));
+            curl_exec($ch);
+            curl_close($ch);
         }
     }
 
