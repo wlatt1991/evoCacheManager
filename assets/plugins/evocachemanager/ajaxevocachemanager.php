@@ -28,18 +28,31 @@ ini_set('display_errors','Off');
 
 if ($fun === 'get' || $fun === 'init') {
     $res = $modx->db->select('id', $modx->getFullTableName("site_content"), "cacheable = '1' AND type = 'document' AND published = '1' AND template <> '0' AND deleted = '0' AND privateweb = '0' AND privatemgr = '0'");
-    $count_all_docs = $modx->db->getRecordCount($res);
-    $count_cached_docs = 0;
 
-    $do = 0;
-
+    $allDocs = array();
     while ($line = $modx->db->getRow($res)) {
-        if (count(glob(MODX_BASE_PATH."assets/cache/docid_" . $line['id'] . "*.pageCache.php")) > 0) {
+        $allDocs[] = $line['id'];
+    }
+
+    $count_all_docs = count($allDocs);
+
+    $files = glob(MODX_BASE_PATH."assets/cache/docid_*");
+
+    foreach($files as $key => $value) {
+        $files[$key] = explode(MODX_BASE_PATH.'assets/cache/docid_', $value)[1];
+        $files[$key] = explode('.', $files[$key])[0];
+        $files[$key] = explode('_', $files[$key])[0];
+    }
+
+    $noCachedDocs = array_diff($allDocs, $files);
+
+    $count_cached_docs = $count_all_docs - count($noCachedDocs);
+
+    if ($fun === 'get') {
+        while($part > 0 && $id = array_pop($noCachedDocs)) {
+            $part--;
+            file_get_contents($modx->makeUrl($id, '', '', 'full'));
             $count_cached_docs++;
-        } elseif (($do < $part) && ($fun === 'get')) {
-            $count_cached_docs++;
-            file_get_contents($modx->makeUrl($line['id'], '', '', 'full'));
-            $do++;
         }
     }
 
