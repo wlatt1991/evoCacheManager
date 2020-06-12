@@ -106,6 +106,7 @@ if($e->name == 'OnManagerWelcomeHome') {
 				</div>
                 <script type="text/javascript">
 					var doCacheVal = false;
+					var countCachedDocs = null;
 					
 					function doCache() {
 						doCacheVal = !doCacheVal;
@@ -154,7 +155,8 @@ if($e->name == 'OnManagerWelcomeHome') {
 								},
 								success: function(json) {
 								    parseRes(json);
-								    if (json.count_cached_docs < json.count_all_docs) {
+								    countCachedDocs = json.count_cached_docs;
+								    if (json.count_cached_docs < json.count_all_docs && countCachedDocs !== json.count_cached_docs) {
 								        getCache();
 								    } else {
 								        doCache();
