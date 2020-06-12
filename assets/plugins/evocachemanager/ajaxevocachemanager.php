@@ -21,8 +21,8 @@ if(!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || (strtolower($_SERVER['HTTP_X_REQ
 }
 
 set_time_limit(600);
-error_reporting(0);
-ini_set('display_errors','Off');
+//error_reporting(0);
+//ini_set('display_errors','Off');
 
 if ($fun === 'get' || $fun === 'init') {
     $cache_folder = MODX_BASE_PATH.$modx->getCacheFolder();
@@ -63,6 +63,7 @@ if ($fun === 'get' || $fun === 'init') {
         while($part > 0 && $id = array_pop($no_cached_docs)) {
             $part--;
             $count_cached_docs++;
+            print_r($count_cached_docs);
             //file_get_contents($modx->makeUrl($id, '', '', 'full'));
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_HEADER, true);
@@ -82,7 +83,7 @@ if ($fun === 'get' || $fun === 'init') {
         'count_cached_docs' => $count_cached_docs,
         'count_all_docs' => $count_all_docs,
         'perc' => $perc,
-        'do' => !!($count_cached_docs < $count_all_docs),
+        'do' => !!($count_cached_docs < $count_all_docs) && function_exists('curl_version'),
     ));
 }
 
