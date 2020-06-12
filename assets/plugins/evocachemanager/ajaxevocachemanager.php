@@ -63,8 +63,6 @@ if ($fun === 'get' || $fun === 'init') {
         while($part > 0 && $id = array_pop($no_cached_docs)) {
             $part--;
             $count_cached_docs++;
-            print_r($count_cached_docs);
-            //file_get_contents($modx->makeUrl($id, '', '', 'full'));
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_HEADER, true);
             curl_setopt($ch, CURLOPT_NOBODY, true);
